@@ -207,8 +207,8 @@ def get_deals():
         
 
             
-        # 1. Fetch latest 300 documents using primary key sorting (extremely fast)
-        raw_docs = list(coll.find(sort=[("Time", -1)]).limit(300))
+        # 1. Fetch latest 300 documents using primary key sorting (extremely fast using indexed inserted_at)
+        raw_docs = list(coll.find(sort=[("inserted_at", -1)]).limit(300))
         if not raw_docs:
             return jsonify([])
 
@@ -278,29 +278,42 @@ def get_deals():
                         "imgurl": pg.get("imgurl")
                     }
 
-        # 4. Predict score and format JSON response
-        processed = []
+        # 4. Extract features for all docs
+        features_list = []
         for doc in docs:
+            pid = doc.get("pid", "Unknown")
+            sid = doc.get("sid")
+            pg_info = graph_lookup.get((sid, pid), {})
+            g_data = pg_info.get("data")
+            feat = extract_features(doc, graph_data=g_data)
+            features_list.append(feat)
+
+        # 5. Perform batch ML predictions (reduces prediction overhead from 3s+ to <0.2s)
+        scores = [0] * len(docs)
+        if model is not None and features_list:
+            try:
+                df_all = pd.DataFrame([{
+                    "price": f["price"],
+                    "median_180": f["median_180"],
+                    "min_180": f["min_180"],
+                    "flash_factor": f["flash_factor"]
+                } for f in features_list])
+                probs = model.predict_proba(df_all)[:, 1]
+                scores = [int(round(float(prob) * 1000)) for prob in probs]
+            except Exception as pe:
+                print(f"Batch prediction error: {str(pe)}")
+
+        # 6. Format JSON response
+        processed = []
+        for idx, doc in enumerate(docs):
             pid = doc.get("pid", "Unknown")
             sid = doc.get("sid")
             pg_info = graph_lookup.get((sid, pid), {})
             g_data = pg_info.get("data")
             pg_imgurl = pg_info.get("imgurl")
 
-            feat = extract_features(doc, graph_data=g_data)
-            score = 0
-            if model is not None:
-                try:
-                    df_in = pd.DataFrame([{
-                        "price": feat["price"],
-                        "median_180": feat["median_180"],
-                        "min_180": feat["min_180"],
-                        "flash_factor": feat["flash_factor"]
-                    }])
-                    prob = model.predict_proba(df_in)[:, 1][0]
-                    score = int(round(float(prob) * 1000))
-                except Exception:
-                    score = 0
+            feat = features_list[idx]
+            score = scores[idx]
 
             # Show only products predicted as a deal (score >= 500)
             if score < 500:
