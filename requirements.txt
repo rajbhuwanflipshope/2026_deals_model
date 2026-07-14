@@ -6,3 +6,7 @@ xgboost
 scikit-learn
 joblib
 gunicorn
+fastapi
+uvicorn
+gradio
+a2wsgi
