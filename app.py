@@ -4,6 +4,15 @@ from fastapi import FastAPI
 from fastapi.middleware.wsgi import WSGIMiddleware
 import gradio as gr
 
+# Import spaces for Hugging Face ZeroGPU compatibility
+try:
+    import spaces
+    @spaces.GPU
+    def dummy_gpu_fn():
+        return "ZeroGPU Initialized"
+except ImportError:
+    pass
+
 # Import the Flask application from the dashboard folder
 from dashboard.dashboard import app as flask_app
 
