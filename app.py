@@ -14,15 +14,19 @@ except ImportError:
 # Import the Flask application from the dashboard folder
 from dashboard.dashboard import app as flask_app
 
-# 1. Define a minimal Gradio interface (required by Hugging Face to detect Gradio SDK)
-with gr.Blocks() as demo:
-    gr.Markdown("# Live Deal Drop Dashboard")
-    gr.HTML("<script>window.location.href = '/';</script>")
+# Define custom CSS to make the iframe occupy 100% of the viewport and hide Gradio's default styling/footer
+custom_css = """
+footer {visibility: hidden !important; display: none !important;}
+.gradio-container {max-width: 100% !important; padding: 0 !important; margin: 0 !important; height: 100vh !important;}
+iframe {width: 100%; height: 100vh; border: none; margin: 0; padding: 0;}
+"""
 
-# 2. Mount the Flask app directly onto Gradio's underlying FastAPI app
-# We mount it at the root "/" so that the Flask dashboard is served directly at the main URL.
-demo.app.mount("/", WSGIMiddleware(flask_app))
+with gr.Blocks(css=custom_css, title="2026 Deal Model Dashboard") as demo:
+    # Embed the Flask app via a full-screen iframe
+    gr.HTML("<iframe src='/app'></iframe>")
 
-# 3. Launch Gradio (Gradio will automatically bind to the correct port 7860)
+# Mount the Flask app onto Gradio's underlying FastAPI app under the '/app' subpath
+demo.app.mount("/app", WSGIMiddleware(flask_app))
+
 if __name__ == "__main__":
     demo.launch()
