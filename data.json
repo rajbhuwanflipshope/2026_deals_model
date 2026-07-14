@@ -1,0 +1,200 @@
+{
+    "_id": {
+        "$oid": "6a55c7a45f5aa95a1f381982"
+    },
+    "pid": "WSPHGH5FVH59FJPG",
+    "sid": 1,
+    "Time": {
+        "$date": "2026-07-14T05:22:42.479Z"
+    },
+    "active": 1,
+    "aff_url": "https://fpkrt.cc/tdmzil",
+    "brand": "OCTIVE",
+    "cat": "HouseHoldSuppliesAndConsummables",
+    "category": 7,
+    "count": 34,
+    "current_price": 865,
+    "data_updated_validated": 9,
+    "day_percent_30": 73.33333333333334,
+    "day_percent_90": 31.11111111111111,
+    "deal_queue_id": "6a55c7a25f5aa95a1f381717",
+    "deal_type": 1,
+    "discount": 32,
+    "drop_median": 41.98524480214621,
+    "drop_p20": 41.98524480214621,
+    "graph_data": [
+        {
+            "time": "2026-06-07",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-08",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-16",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-17",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-18",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-19",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-20",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-22",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-23",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-24",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-25",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-27",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-28",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-29",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-06-30",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-07-01",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-07-03",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-07-05",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-07-06",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-07-07",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-07-08",
+            "min_price": 1491,
+            "max_price": 1491
+        },
+        {
+            "time": "2026-07-09",
+            "min_price": 1279,
+            "max_price": 1279
+        },
+        {
+            "time": "2026-07-11",
+            "min_price": 1179,
+            "max_price": 1179
+        },
+        {
+            "time": "2026-07-12",
+            "min_price": 1179,
+            "max_price": 1279
+        },
+        {
+            "time": "2026-07-14",
+            "min_price": 865,
+            "max_price": 865
+        }
+    ],
+    "imgurl": "https://rukminim1.flixcart.com/image/400/400/xif0q/washing-powder/5/f/v/5-supreme-wash-advanced-clean-matic-top-load-perfumed-pink-original-imahgh5fmufhnjrb.jpeg?q=90",
+    "inStock": 1,
+    "inserted_at": {
+        "$date": "2026-07-14T05:22:44.030Z"
+    },
+    "isSent_app": 1,
+    "isSent_app_V2": 1,
+    "isSent_telegram": 0,
+    "is_NotificationSent": 1,
+    "is_NotificationSent_V2": 1,
+    "is_a_deal": 1,
+    "last_lowest_price": 1179,
+    "ma_15": 1456.07,
+    "ma_3": 1316.33,
+    "ma_30": 1473.53,
+    "ma_7": 1416.14,
+    "median": 1491,
+    "min": 1179,
+    "mrp": 1499,
+    "old_price": 1279,
+    "old_price_time": {
+        "$date": "2026-07-12T14:05:44.316Z"
+    },
+    "p20": 1491,
+    "price": 865,
+    "price_insights": {
+        "lowest_1m": 1179,
+        "lowest_6m": 1179,
+        "lowest_ever": 1179
+    },
+    "rating": 0,
+    "rating_count": 0,
+    "reactions": {
+        "likes": 0,
+        "dislikes": 0
+    },
+    "score": 962,
+    "score_old": 609.2413647795438,
+    "sub_cat_id": 701,
+    "tbd_deal_active": 1,
+    "tbd_deal_type": 1,
+    "tel_send": -1,
+    "time": "2026-07-14 10:52:44",
+    "title": "OCTIVE SUPREME WASH Advanced Clean Matic Top Load Perfumed Pink Detergent Powder Detergent Powder (Fresh Aroma)",
+    "type": 1,
+    "updated_at": {
+        "$date": "2026-07-14T05:22:44.030Z"
+    }
+}

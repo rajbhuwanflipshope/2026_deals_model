@@ -1,0 +1,9 @@
+# Ignored files
+mongo_full_data.csv
+__pycache__/
+*.log
+.gemini/
+.idea/
+.vscode/
+venv/
+*.csv
