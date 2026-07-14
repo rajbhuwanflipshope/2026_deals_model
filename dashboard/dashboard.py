@@ -25,6 +25,15 @@ for path in paths:
 mongo_uri = "mongodb://read_only:v%3F8lT%21sw%26pu4ec2zaPra@143.110.184.59:27017/?authMechanism=DEFAULT"
 client = pymongo.MongoClient(mongo_uri, serverSelectionTimeoutMS=3000)
 
+# One-time Index Initialization at startup
+try:
+    _db = client["fs_graph"]
+    _db["deals_queue"].create_index([("Time", -1)], background=True)
+    _db["price_graph"].create_index([("sid", 1), ("pid", 1)], background=True)
+    print("Database indexes initialized successfully.")
+except Exception as _e:
+    print(f"Warning: Could not initialize database indexes at startup: {str(_e)}")
+
 def calculate_180d_anchors(graph_data):
     """Calculate median_180, min_180, and flash_factor from graph_data."""
     if not graph_data:
@@ -196,11 +205,7 @@ def get_deals():
         db = client["fs_graph"]
         coll = db["deals_queue"]
         
-        # Ensure index exists for fast query
-        try:
-            coll.create_index([("Time", -1)], background=True)
-        except Exception:
-            pass
+
             
         # 1. Fetch latest 300 documents using primary key sorting (extremely fast)
         raw_docs = list(coll.find(sort=[("Time", -1)]).limit(300))
@@ -263,10 +268,6 @@ def get_deals():
         
         if pairs:
             pg_coll = db["price_graph"]
-            try:
-                pg_coll.create_index([("sid", 1), ("pid", 1)], background=True)
-            except Exception:
-                pass
             pg_docs = list(pg_coll.find({"$or": pairs}, {"sid": 1, "pid": 1, "data": 1, "imgurl": 1}))
             for pg in pg_docs:
                 pg_sid = pg.get("sid")
