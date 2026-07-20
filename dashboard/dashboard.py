@@ -520,6 +520,14 @@ def get_deals():
                     url = f"https://www.amazon.in/dp/{pid}"
                 elif sid == 7:
                     url = f"https://www.myntra.com/{pid}"
+                elif sid == 9:
+                    url = f"https://www.ajio.com/search/?text={pid}"
+                elif sid == 10:
+                    url = f"https://www.pepperfry.com/site_search?q={pid}"
+                elif sid == 13:
+                    url = f"https://www.croma.com/search?text={pid}"
+                elif sid == 14:
+                    url = f"https://www.reliancedigital.in/search?q={pid}:relevance"
                 else:
                     import urllib.parse
                     url = f"https://www.google.com/search?q={urllib.parse.quote(title_str or pid)}"

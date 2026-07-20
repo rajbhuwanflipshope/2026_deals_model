@@ -304,6 +304,26 @@
             color: white;
         }
 
+        .platform-croma {
+            background-color: #00b9b0;
+            color: white;
+        }
+
+        .platform-reliance {
+            background-color: #e42526;
+            color: white;
+        }
+
+        .platform-ajio {
+            background-color: #2f3e46;
+            color: white;
+        }
+
+        .platform-pepperfry {
+            background-color: #ff7043;
+            color: white;
+        }
+
         .platform-generic {
             background-color: #64748b;
             color: white;
@@ -572,7 +592,11 @@
         function getPlatformBadge(sid) {
             if (sid === 1) return { class: 'platform-flipkart', name: 'Flipkart' };
             if (sid === 2) return { class: 'platform-amazon', name: 'Amazon' };
-            if (sid === 13) return { class: 'platform-myntra', name: 'Myntra' };
+            if (sid === 7) return { class: 'platform-myntra', name: 'Myntra' };
+            if (sid === 9) return { class: 'platform-ajio', name: 'Ajio' };
+            if (sid === 10) return { class: 'platform-pepperfry', name: 'Pepperfry' };
+            if (sid === 13) return { class: 'platform-croma', name: 'Croma' };
+            if (sid === 14) return { class: 'platform-reliance', name: 'Reliance Digital' };
             return { class: 'platform-generic', name: `Site ${sid}` };
         }
 
