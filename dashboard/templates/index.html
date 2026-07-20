@@ -558,10 +558,13 @@
         <div class="dashboard-header">
             <h1 class="dashboard-title">🔥 Flipshope 2026 Deals Model</h1>
             <p class="dashboard-subtitle">Discover daily verified price drops across categories</p>
-            <div>
+            <div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 15px;">
                 <div class="live-badge">
                     <span class="live-dot"></span>Ayee Hayyeee kya deals hai
                 </div>
+                <button id="manual-refresh-btn" onclick="fetchDeals()" style="background: #1d4ed8; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(29, 78, 216, 0.2); font-family: inherit; transition: background 0.2s;">
+                    🔄 Refresh Deals
+                </button>
             </div>
         </div>
 
@@ -889,8 +892,8 @@
         // Initial fetch
         fetchDeals();
 
-        // Check for updates every 5 seconds
-        setInterval(fetchDeals, 5000);
+        // Check for updates every 5 minutes
+        setInterval(fetchDeals, 5 * 60 * 1000);
     </script>
 </body>
 
