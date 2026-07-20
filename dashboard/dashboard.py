@@ -6,20 +6,147 @@ import pymongo
 import datetime
 import os
 import sys
+import subprocess
+import json
 
 app = Flask(__name__)
 
-# Load XGBoost Model
-model = None
-paths = ["labeled2.pkl", "../labeled2.pkl", "dashboard/labeled2.pkl"]
+
+
+# Load Labeled2 Model
+labeled2_model = None
+root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+paths = [
+    os.path.join(root_path, "labeled2.pkl"),
+    "labeled2.pkl",
+    "dashboard/labeled2.pkl"
+]
 for path in paths:
     if os.path.exists(path):
         try:
-            model = joblib.load(path)
-            print(f"Successfully loaded XGBoost model from {path}")
+            labeled2_model = joblib.load(path)
+            print(f"Successfully loaded labeled2 model from {path}")
             break
         except Exception as e:
-            print(f"Error loading model from {path}: {str(e)}")
+            print(f"Error loading labeled2 model from {path}: {str(e)}")
+
+# Load Old Models
+old_model = None
+old_scaler = None
+old_encoder = None
+
+old_dir = os.path.join(root_path, "old")
+if os.path.exists(old_dir):
+    try:
+        old_model = joblib.load(os.path.join(old_dir, "deals_model.pkl"))
+        old_scaler = joblib.load(os.path.join(old_dir, "scaler.pkl"))
+        old_encoder = joblib.load(os.path.join(old_dir, "encoder.pkl"))
+        print("Successfully loaded old models from old/ directory")
+    except Exception as e:
+        print(f"Error loading old models from old/ directory: {str(e)}")
+
+
+def extract_all_features(doc):
+    def to_float(val, default=0.0):
+        if val is None or str(val).strip() == "" or str(val).strip().lower() in ["none", "null"]:
+            return default
+        try:
+            return float(val)
+        except (ValueError, TypeError):
+            return default
+
+    # Safe category extraction
+    cat_val = doc.get("category")
+    try:
+        cat_val = int(float(cat_val)) if cat_val is not None else 2
+    except (ValueError, TypeError):
+        cat_val = 2
+
+    return {
+        "price": to_float(doc.get("price")),
+        "rating": to_float(doc.get("rating")),
+        "rating_count": to_float(doc.get("rating_count")),
+        "last_lowest_price": to_float(doc.get("last_lowest_price")),
+        "ma_15": to_float(doc.get("ma_15")),
+        "ma_3": to_float(doc.get("ma_3")),
+        "ma_30": to_float(doc.get("ma_30")),
+        "ma_7": to_float(doc.get("ma_7")),
+        "median": to_float(doc.get("median")),
+        "day_percent_30": to_float(doc.get("day_percent_30")),
+        "day_percent_90": to_float(doc.get("day_percent_90")),
+        "drop_median": to_float(doc.get("drop_median")),
+        "drop_p20": to_float(doc.get("drop_p20")),
+        "category": cat_val
+    }
+
+def predict_old_models_batch(feats):
+    if not feats or old_model is None or old_scaler is None or old_encoder is None:
+        return [0] * len(feats)
+    try:
+        df = pd.DataFrame(feats)
+        encoded = old_encoder.transform(df[['category']])
+        encoded_df = pd.DataFrame(encoded, columns=old_encoder.get_feature_names_out(['category']), index=df.index)
+        num_cols = [
+            'price', 'rating', 'rating_count', 'last_lowest_price', 'ma_15', 'ma_3', 'ma_30',
+            'ma_7', 'median', 'day_percent_30', 'day_percent_90', 'drop_median', 'drop_p20'
+        ]
+        df[num_cols] = old_scaler.transform(df[num_cols])
+        X_input = pd.concat([df.drop(columns=['category']), encoded_df], axis=1)
+        cols = list(old_model.feature_names_in_)
+        X_input = X_input[cols]
+        probs = old_model.predict_proba(X_input)[:, 1]
+        return [int(round(float(prob) * 1000)) for prob in probs]
+    except Exception as e:
+        print(f"Error in old model prediction batch: {str(e)}")
+        return [0] * len(feats)
+
+
+category_avg_discount = {
+    1: 45, 2: 35, 3: 55, 4: 30, 5: 30,
+    6: 20, 7: 25, 8: 45, 9: 45, 10: 20,
+    11: 40, 12: 25, 13: 25, 14: 45,
+    15: 28, 16: 35, 17: 25
+}
+
+category_tolerance = {
+    1: 3, 2: 2, 3: 4, 4: 2, 5: 3,
+    6: 2, 7: 2, 8: 3, 9: 3, 10: 2,
+    11: 4, 12: 1, 13: 1, 14: 3,
+    15: 3, 16: 3, 17: 2
+}
+
+def predict_labeled2_batch(feats):
+    if not feats or labeled2_model is None:
+        return [0] * len(feats)
+    try:
+        df = pd.DataFrame(feats)
+        
+        # Hard coded part for category (Replaces encoder.transform)
+        df['category'] = pd.to_numeric(df['category'], errors='coerce')
+        avg_category_discount = df['category'].map(category_avg_discount).fillna(25)
+        category_tolerance_val = df['category'].map(category_tolerance).fillna(2)
+        cat_target_pct = (avg_category_discount - category_tolerance_val) / 100.0
+        
+        encoded_df = pd.DataFrame({
+            'avg_category_discount': avg_category_discount,
+            'category_tolerance_val': category_tolerance_val,
+            'cat_target_pct': cat_target_pct
+        }, index=df.index)
+
+        model_features = list(getattr(labeled2_model, 'feature_names_in_', ['price', 'median_180', 'min_180', 'flash_factor']))
+        cols_to_drop = [c for c in ['category'] if c not in model_features]
+        X_input = pd.concat([df.drop(columns=cols_to_drop, errors='ignore'), encoded_df], axis=1)
+        
+        probs = labeled2_model.predict_proba(X_input[model_features])[:, 1]
+        
+
+        
+        return [int(round(float(prob) * 1000)) for prob in probs]
+    except Exception as e:
+        print(f"Error in labeled2 prediction batch: {str(e)}")
+        return [0] * len(feats)
+
+
 
 # MongoDB Configuration
 mongo_uri = "mongodb://read_only:v%3F8lT%21sw%26pu4ec2zaPra@143.110.184.59:27017/?authMechanism=DEFAULT"
@@ -207,8 +334,8 @@ def get_deals():
         
 
             
-        # 1. Fetch latest 300 documents using primary key sorting (extremely fast using indexed inserted_at)
-        raw_docs = list(coll.find(sort=[("inserted_at", -1)]).limit(300))
+        # 1. Fetch latest 300 documents using primary key sorting (extremely fast using indexed Time)
+        raw_docs = list(coll.find(sort=[("Time", -1)]).limit(1000))
         if not raw_docs:
             return jsonify([])
 
@@ -288,20 +415,21 @@ def get_deals():
             feat = extract_features(doc, graph_data=g_data)
             features_list.append(feat)
 
-        # 5. Perform batch ML predictions (reduces prediction overhead from 3s+ to <0.2s)
-        scores = [0] * len(docs)
-        if model is not None and features_list:
+        # 5. Perform predictions using both models and calculate average score
+        # Retrieve old score directly from database (using doc.get("score") which matches predicted old model score)
+        old_scores = []
+        for doc in docs:
+            raw_old = doc.get("score")
             try:
-                df_all = pd.DataFrame([{
-                    "price": f["price"],
-                    "median_180": f["median_180"],
-                    "min_180": f["min_180"],
-                    "flash_factor": f["flash_factor"]
-                } for f in features_list])
-                probs = model.predict_proba(df_all)[:, 1]
-                scores = [int(round(float(prob) * 1000)) for prob in probs]
-            except Exception as pe:
-                print(f"Batch prediction error: {str(pe)}")
+                val = int(float(raw_old)) if raw_old is not None else 0
+            except (ValueError, TypeError):
+                val = 0
+            old_scores.append(val)
+
+        all_feats_labeled2 = features_list
+        labeled2_scores = predict_labeled2_batch(all_feats_labeled2)
+
+        scores = [int(round((o_s + l_s) / 2.0)) for o_s, l_s in zip(old_scores, labeled2_scores)]
 
         # 6. Format JSON response
         processed = []
@@ -313,10 +441,12 @@ def get_deals():
             pg_imgurl = pg_info.get("imgurl")
 
             feat = features_list[idx]
-            score = scores[idx]
+            average_score = scores[idx]
+            labeled2_score = labeled2_scores[idx]
+            db_score = old_scores[idx]
 
-            # Show only products predicted as a deal (score >= 500)
-            if score < 500:
+            # Show only products predicted as a deal (average score > 600)
+            if average_score <= 400:
                 continue
 
             # Exclude products which don't have a valid title
@@ -388,7 +518,7 @@ def get_deals():
                     url = f"https://www.flipkart.com/product/p/itme?pid={pid}"
                 elif sid == 2:
                     url = f"https://www.amazon.in/dp/{pid}"
-                elif sid == 13:
+                elif sid == 7:
                     url = f"https://www.myntra.com/{pid}"
                 else:
                     import urllib.parse
@@ -401,8 +531,8 @@ def get_deals():
                 "price": price_val,
                 "mrp": mrp_val,
                 "discount": discount_val,
-                "score": score,
-                "db_score": db_score_val,
+                "score": labeled2_score,
+                "db_score": db_score,
                 "imgurl": img,
                 "aff_url": url,
                 "time_ago": get_time_ago(doc.get("Time")),
@@ -417,5 +547,6 @@ def get_deals():
         return jsonify({"error": str(e)})
 
 if __name__ == '__main__':
-    # Start Flask server on port 5000
-    app.run(host='0.0.0.0', port=5005, debug=True, use_reloader=False)
+    # Start Flask server on port from environment or default to 5005
+    port = int(os.environ.get("PORT", 5005))
+    app.run(host='0.0.0.0', port=port, debug=True, use_reloader=False)
