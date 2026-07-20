@@ -129,6 +129,7 @@
             font-family: inherit;
             transition: background 0.2s;
         }
+
         .sidebar-toggle:hover {
             background: #1d4ed8;
         }
@@ -521,7 +522,8 @@
         <div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <div class="sidebar-title" style="margin-bottom: 0;"><span>⚙️</span> Configuration</div>
-                <button class="tooltip-close" onclick="toggleSidebar()" style="width: 24px; height: 24px; font-size: 0.85rem;" title="Collapse Sidebar">◀</button>
+                <button class="tooltip-close" onclick="toggleSidebar()"
+                    style="width: 24px; height: 24px; font-size: 0.85rem;" title="Collapse Sidebar">◀</button>
             </div>
             <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-bottom: 15px;">
         </div>
@@ -549,7 +551,8 @@
     <!-- Main Content -->
     <div class="main-content">
         <!-- Floating Expand Button shown only when sidebar is collapsed -->
-        <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" style="display: flex;" title="Expand Sidebar">
+        <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" style="display: flex;"
+            title="Expand Sidebar">
             ▶ Filters
         </button>
         <div class="dashboard-header">

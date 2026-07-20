@@ -523,9 +523,15 @@ def get_deals():
                 elif sid == 9:
                     url = f"https://www.ajio.com/search/?text={pid}"
                 elif sid == 10:
-                    url = f"https://www.pepperfry.com/site_search?q={pid}"
+                    if str(pid).endswith(".html"):
+                        url = f"https://www.pepperfry.com/product/{pid}"
+                    else:
+                        import re
+                        slug = re.sub(r'[^a-zA-Z0-9\s-]', '', title_str).strip().lower()
+                        slug = re.sub(r'[\s-]+', '-', slug)
+                        url = f"https://www.pepperfry.com/product/{slug}-{pid}.html"
                 elif sid == 13:
-                    url = f"https://www.croma.com/search?text={pid}"
+                    url = f"https://www.croma.com/search/p/{pid}"
                 elif sid == 14:
                     url = f"https://www.reliancedigital.in/search?q={pid}:relevance"
                 else:
