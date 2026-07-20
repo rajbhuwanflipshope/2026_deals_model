@@ -111,7 +111,7 @@ def extract_record(item):
         extracted["min_180"] is None or 
         extracted["flash_factor"] is None):
         
-        graph_data = item.get("graph_data")
+        graph_data = item.get("graph_data") or item.get("data")
         if graph_data:
             computed = calculate_180d_anchors(graph_data)
             for k in ["median_180", "min_180", "flash_factor"]:

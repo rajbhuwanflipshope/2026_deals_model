@@ -1,200 +1,189 @@
 {
     "_id": {
-        "$oid": "6a55c7a45f5aa95a1f381982"
+        "$oid": "6a01afeb5f5aa95a1f128c95"
     },
-    "pid": "WSPHGH5FVH59FJPG",
-    "sid": 1,
-    "Time": {
-        "$date": "2026-07-14T05:22:42.479Z"
-    },
-    "active": 1,
-    "aff_url": "https://fpkrt.cc/tdmzil",
-    "brand": "OCTIVE",
-    "cat": "HouseHoldSuppliesAndConsummables",
-    "category": 7,
-    "count": 34,
-    "current_price": 865,
-    "data_updated_validated": 9,
-    "day_percent_30": 73.33333333333334,
-    "day_percent_90": 31.11111111111111,
-    "deal_queue_id": "6a55c7a25f5aa95a1f381717",
-    "deal_type": 1,
-    "discount": 32,
-    "drop_median": 41.98524480214621,
-    "drop_p20": 41.98524480214621,
-    "graph_data": [
-        {
-            "time": "2026-06-07",
-            "min_price": 1491,
-            "max_price": 1491
+    "pid": "B0GZKW6QCC",
+    "sid": 2,
+    "data": {
+        "2026-05-11": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-08",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-06": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-16",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-07": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-17",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-08": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-18",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-09": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-19",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-10": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-20",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-11": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-22",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-12": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-23",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-13": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-24",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-14": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-25",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-15": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-27",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-16": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-28",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-17": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-29",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-18": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-06-30",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-19": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-07-01",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-22": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-07-03",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-23": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-07-05",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-24": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-07-06",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-25": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-07-07",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-26": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-07-08",
-            "min_price": 1491,
-            "max_price": 1491
+        "2026-06-27": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-07-09",
-            "min_price": 1279,
-            "max_price": 1279
+        "2026-06-28": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-07-11",
-            "min_price": 1179,
-            "max_price": 1179
+        "2026-06-29": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-07-12",
-            "min_price": 1179,
-            "max_price": 1279
+        "2026-06-30": {
+            "0": 2999,
+            "1": 2999,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         },
-        {
-            "time": "2026-07-14",
-            "min_price": 865,
-            "max_price": 865
+        "2026-07-20": {
+            "0": 1899,
+            "1": 1899,
+            "pg_ins": 1,
+            "pg_ins_dup": 1
         }
+    },
+    "lp_time": {
+        "$date": "2026-07-20T06:41:24.592Z"
+    },
+    "lst_pg_ins_date": "2026-07-20",
+    "pg_ins_uids": [
+        "YPBUkoVY"
     ],
-    "imgurl": "https://rukminim1.flixcart.com/image/400/400/xif0q/washing-powder/5/f/v/5-supreme-wash-advanced-clean-matic-top-load-perfumed-pink-original-imahgh5fmufhnjrb.jpeg?q=90",
-    "inStock": 1,
-    "inserted_at": {
-        "$date": "2026-07-14T05:22:44.030Z"
-    },
-    "isSent_app": 1,
-    "isSent_app_V2": 1,
-    "isSent_telegram": 0,
-    "is_NotificationSent": 1,
-    "is_NotificationSent_V2": 1,
-    "is_a_deal": 1,
-    "last_lowest_price": 1179,
-    "ma_15": 1456.07,
-    "ma_3": 1316.33,
-    "ma_30": 1473.53,
-    "ma_7": 1416.14,
-    "median": 1491,
-    "min": 1179,
-    "mrp": 1499,
-    "old_price": 1279,
-    "old_price_time": {
-        "$date": "2026-07-12T14:05:44.316Z"
-    },
-    "p20": 1491,
-    "price": 865,
-    "price_insights": {
-        "lowest_1m": 1179,
-        "lowest_6m": 1179,
-        "lowest_ever": 1179
-    },
-    "rating": 0,
-    "rating_count": 0,
-    "reactions": {
-        "likes": 0,
-        "dislikes": 0
-    },
-    "score": 962,
-    "score_old": 609.2413647795438,
-    "sub_cat_id": 701,
-    "tbd_deal_active": 1,
-    "tbd_deal_type": 1,
-    "tel_send": -1,
-    "time": "2026-07-14 10:52:44",
-    "title": "OCTIVE SUPREME WASH Advanced Clean Matic Top Load Perfumed Pink Detergent Powder Detergent Powder (Fresh Aroma)",
-    "type": 1,
-    "updated_at": {
-        "$date": "2026-07-14T05:22:44.030Z"
-    }
+    "price": 1899,
+    "stock": 1,
+    "currency": "INR",
+    "_data_source": "scrap_socket_url",
+    "all_imgurls": [
+        "https://m.media-amazon.com/images/I/41ed8LjTlCL._SS100_.jpg",
+        "https://m.media-amazon.com/images/I/51lyBBS5K7L._SS100_.jpg",
+        "https://m.media-amazon.com/images/I/41BKRs6PiqL._SS100_.jpg",
+        "https://m.media-amazon.com/images/I/51sbexqbGWL._SS100_.jpg",
+        "https://m.media-amazon.com/images/I/41u-TTH0w4L._SS100_.jpg",
+        "https://m.media-amazon.com/images/I/516OqVf1dOL._SS100_.jpg",
+        "https://m.media-amazon.com/images/I/41Mu48fbN+L._SS100_.jpg"
+    ],
+    "brand": "Theona",
+    "cat": "Home & Kitchen›Kitchen & Home Appliances›Vacuum, Cleaning & Ironing›Vacuums & Floor Care›Vacuums›Handheld Vacuums",
+    "category": 17,
+    "color": "Black And Neon Green",
+    "description": "Keep your surroundings spotless with the THEONA Cordless Handheld Vacuum Cleaner, designed for modern homes and on-the-go cleaning needs.   Built with powerful 6kPa suction, this compact vacuum easily removes stubborn dust, pet hair, and debris from multiple surfaces including sofas, carpets, car seats, and mattresses. Its cordless and lightweight design makes it extremely convenient for everyday use.   Equipped with a USB-C charging system, the vacuum delivers up to 20 minutes of runtime, ensuring uninterrupted cleaning sessions. The included multi-purpose attachments help you clean even the most hard-to-reach areas like corners, gaps, keyboards, and car interiors.   The washable filter and detachable dust container make maintenance simple and cost-effective, while its sleek, ergonomic design adds style to functionality.   Perfect for homes, offices, and cars, THEONA vacuum cleaner is your ultimate cleaning companion.",
+    "imgurl": "https://m.media-amazon.com/images/I/41ed8LjTlCL._SX300_SY300_QL70_ML2_.jpg",
+    "mrp": 3999,
+    "sub_cat_id": 1701,
+    "temp_cat_prediction": "cat_code 17 sub_cat_code 1701",
+    "title": "Theona Cordless Handheld Vacuum Cleaner for Home & Car | 6kPa Powerful Suction | USB-C Fast Charging | Lightweight Portable Vacuum with Crevice & Brush Nozzle | Pet Hair, Sofa, Car Cleaning"
 }

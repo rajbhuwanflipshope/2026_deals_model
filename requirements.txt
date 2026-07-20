@@ -6,6 +6,3 @@ xgboost
 scikit-learn
 joblib
 gunicorn
-fastapi
-uvicorn
-a2wsgi

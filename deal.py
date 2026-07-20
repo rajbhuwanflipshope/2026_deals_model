@@ -36,6 +36,8 @@ while True:
         raw = sys.stdin.readline()
         if not raw:
             break
+        if not raw.strip():
+            continue
  
         input_dict = json.loads(raw.strip())
         job_id = str(input_dict.pop("job_id", ""))
@@ -57,10 +59,14 @@ while True:
 
         # df[num_cols] = scaler.transform(df[num_cols]) # Scaler was not used for this model
         
-        X_input = pd.concat([df.drop(columns=cat_cols, errors='ignore'), encoded_df], axis=1)
+        # Get model feature names
+        model_features = list(getattr(model, 'feature_names_in_', num_cols))
+        
+        # Drop categorical columns only if the model doesn't explicitly require them
+        cols_to_drop = [c for c in cat_cols if c not in model_features]
+        X_input = pd.concat([df.drop(columns=cols_to_drop, errors='ignore'), encoded_df], axis=1)
         
         # Ensure we only pass the columns the model was trained on to prevent feature mismatch errors
-        model_features = getattr(model, 'feature_names_in_', num_cols)
         prob = model.predict_proba(X_input[model_features])[:, 1][0]
  
         end = time.time()
