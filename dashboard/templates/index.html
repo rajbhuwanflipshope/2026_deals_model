@@ -562,7 +562,7 @@
                 <div class="live-badge">
                     <span class="live-dot"></span>Ayee Hayyeee kya deals hai
                 </div>
-                <button id="manual-refresh-btn" onclick="fetchDeals()" style="background: #1d4ed8; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(29, 78, 216, 0.2); font-family: inherit; transition: background 0.2s;">
+                <button id="manual-refresh-btn" onclick="fetchDeals(true)" style="background: #1d4ed8; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(29, 78, 216, 0.2); font-family: inherit; transition: background 0.2s;">
                     🔄 Refresh Deals
                 </button>
             </div>
@@ -756,7 +756,18 @@
         }
 
         // Fetch deals from our local API
-        async function fetchDeals() {
+        async function fetchDeals(forceClear = false) {
+            if (forceClear) {
+                const btn = document.getElementById('manual-refresh-btn');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = '🔄 Refreshing...';
+                    btn.style.opacity = '0.7';
+                }
+                // Clear active cards state and HTML grid to force rebuild
+                dealGrid.innerHTML = '';
+                activeCardIds.clear();
+            }
             try {
                 const response = await fetch('/deals');
                 if (!response.ok) throw new Error('Network response not ok');
@@ -880,6 +891,15 @@
             } catch (err) {
                 console.error(err);
                 scanStatus.innerHTML = '<span style="color: #ef4444;">⚠️ Connection to server lost. Retrying...</span>';
+            } finally {
+                if (forceClear) {
+                    const btn = document.getElementById('manual-refresh-btn');
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = '🔄 Refresh Deals';
+                        btn.style.opacity = '1';
+                    }
+                }
             }
         }
 
