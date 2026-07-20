@@ -115,6 +115,31 @@ category_tolerance = {
     15: 3, 16: 3, 17: 2
 }
 
+def calculate_deal_frequency(median_price, current_price, history_prices, tolerance=0.05):
+    if median_price is None or median_price <= 0:
+        return 0.0
+
+    if current_price is None or current_price <= 0:
+        return 0.0
+
+    if not history_prices:
+        return 0.0
+
+    current_drop = (median_price - current_price) / median_price
+
+    matching_count = 0
+
+    for hist_price in history_prices:
+        if hist_price is None or hist_price <= 0:
+            continue
+
+        hist_drop = (median_price - hist_price) / median_price
+
+        if hist_drop >= current_drop - tolerance:
+            matching_count += 1
+
+    return matching_count / 180.0
+
 def predict_labeled2_batch(feats):
     if not feats or labeled2_model is None:
         return [0] * len(feats)
@@ -484,6 +509,7 @@ def get_deals():
 
             # Extract price history for Chart.js (6 months / 180 days only)
             history_list = []
+            history_prices = []
             if g_data and isinstance(g_data, dict):
                 parsed_history = []
                 for date_str, price_info in g_data.items():
@@ -493,7 +519,8 @@ def get_deals():
                             low_p = price_info.get("0")
                         else:
                             low_p = price_info
-                        parsed_history.append((dt, date_str, float(low_p) if low_p is not None else 0.0))
+                        if low_p is not None:
+                            parsed_history.append((dt, date_str, float(low_p)))
                     except ValueError:
                         continue
                 
@@ -509,6 +536,7 @@ def get_deals():
                                 "date": date_str,
                                 "price": price
                             })
+                            history_prices.append(price)
 
             # Construct product URL dynamically based on sid and pid if aff_url is missing
             title_str = doc.get("title", "No Title")
@@ -538,6 +566,10 @@ def get_deals():
                     import urllib.parse
                     url = f"https://www.google.com/search?q={urllib.parse.quote(title_str or pid)}"
 
+            median_180_val = int(round(feat.get("median_180", 0.0))) if feat.get("median_180") is not None else price_val
+            deal_frequency_val = calculate_deal_frequency(median_180_val, price_val, history_prices)
+            is_fake_val = round(deal_frequency_val, 2) > 0.04
+
             processed.append({
                 "pid": pid,
                 "sid": sid,
@@ -551,8 +583,10 @@ def get_deals():
                 "aff_url": url,
                 "time_ago": get_time_ago(doc.get("Time")),
                 "history": history_list,
-                "median_180": int(round(feat.get("median_180", 0.0))) if feat.get("median_180") is not None else price_val,
-                "category": str(doc.get("category", "N/A"))
+                "median_180": median_180_val,
+                "category": str(doc.get("category", "N/A")),
+                "deal_frequency": round(deal_frequency_val, 4),
+                "is_fake": is_fake_val
             })
 
         return jsonify(processed)

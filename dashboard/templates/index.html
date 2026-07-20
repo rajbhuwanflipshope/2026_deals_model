@@ -512,6 +512,61 @@
         .tooltip-close:hover {
             background: #e2e8f0;
         }
+
+        /* Tab Styles */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #64748b;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: inherit;
+            position: relative;
+            transition: color 0.2s;
+            outline: none;
+        }
+
+        .tab-btn:hover {
+            color: #1e293b;
+        }
+
+        .tab-btn.active {
+            color: #1d4ed8;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #1d4ed8;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .deal-freq-badge {
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+        }
     </style>
 </head>
 
@@ -568,6 +623,16 @@
             </div>
         </div>
 
+        <!-- Tabs Container -->
+        <div class="tabs-container">
+            <button id="tab-live" class="tab-btn active" onclick="switchTab('live')">
+                🟢 Live Deals (<span id="count-live">0</span>)
+            </button>
+            <button id="tab-fake" class="tab-btn" onclick="switchTab('fake')">
+                🔴 Fake Deals (<span id="count-fake">0</span>)
+            </button>
+        </div>
+
         <!-- Deal Card Grid -->
         <div class="deal-grid" id="deal-grid">
             <!-- Dynamic deal cards will be inserted here -->
@@ -589,6 +654,14 @@
         // State to keep track of active cards in DOM
         const activeCardIds = new Set();
         let allDeals = []; // Store fetched deals list
+        let currentTab = 'live'; // Active tab state ('live' or 'fake')
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.getElementById('tab-live').classList.toggle('active', tab === 'live');
+            document.getElementById('tab-fake').classList.toggle('active', tab === 'fake');
+            applyFilters();
+        }
 
         // Dictionary for active Chart.js instances and histories
         const initializedCharts = {};
@@ -614,26 +687,42 @@
         }
 
         // Filter and update DOM visibility
-        function applyFilters() {
-            const minScore = parseInt(scoreSlider.value);
-            const query = searchInput.value.toLowerCase().trim();
+         function applyFilters() {
+             const minScore = parseInt(scoreSlider.value);
+             const query = searchInput.value.toLowerCase().trim();
 
-            allDeals.forEach(deal => {
-                const card = document.getElementById(`card-${deal.pid}`);
-                if (!card) return;
+             let liveCount = 0;
+             let fakeCount = 0;
 
-                const scoreMatch = deal.score >= minScore;
-                const searchMatch = !query ||
-                    deal.pid.toLowerCase().includes(query) ||
-                    deal.title.toLowerCase().includes(query);
+             allDeals.forEach(deal => {
+                 const card = document.getElementById(`card-${deal.pid}`);
+                 if (!card) return;
 
-                if (scoreMatch && searchMatch) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
+                 const scoreMatch = deal.score >= minScore;
+                 const searchMatch = !query ||
+                     deal.pid.toLowerCase().includes(query) ||
+                     deal.title.toLowerCase().includes(query);
+
+                 const tabMatch = (currentTab === 'fake') ? deal.is_fake : !deal.is_fake;
+
+                 if (scoreMatch && searchMatch && tabMatch) {
+                     card.style.display = 'flex';
+                 } else {
+                     card.style.display = 'none';
+                 }
+
+                 if (scoreMatch && searchMatch) {
+                     if (deal.is_fake) {
+                         fakeCount++;
+                     } else {
+                         liveCount++;
+                     }
+                 }
+             });
+
+             document.getElementById('count-live').textContent = liveCount;
+             document.getElementById('count-fake').textContent = fakeCount;
+         }
 
         // Event listeners for instant filtering
         scoreSlider.addEventListener('input', () => {
@@ -815,11 +904,12 @@
                                         <span class="tooltip-title">📊 6-Month Price Drop Trend</span>
                                         <button class="tooltip-close" onclick="event.stopPropagation(); closeTooltip('${deal.pid}')">×</button>
                                     </div>
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.72rem; background: #f1f5f9; padding: 6px 10px; border-radius: 8px; font-weight: 500; color: #334155; gap: 4px;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.72rem; background: #f1f5f9; padding: 6px 10px; border-radius: 8px; font-weight: 500; color: #334155; gap: 4px; flex-wrap: wrap;">
                                         <div>Median: <strong>₹${median.toLocaleString('en-IN')}</strong></div>
                                         <div>Price: <strong>₹${price.toLocaleString('en-IN')}</strong></div>
                                         <div>Drop: <strong style="color: #ef4444;">₹${drop_val.toLocaleString('en-IN')}</strong></div>
                                         <div>Drop %: <strong style="color: #16a34a;">${drop_pct.toFixed(1)}%</strong></div>
+                                        <div>Freq: <strong style="color: #2563eb;">${(deal.deal_frequency * 100).toFixed(0)}%</strong></div>
                                     </div>
                                     <div style="flex: 1; min-height: 0; position: relative;">
                                         <canvas id="chart-${deal.pid}"></canvas>
@@ -832,9 +922,10 @@
                                 <div class="image-container">
                                     <img src="${img || 'https://via.placeholder.com/150?text=No+Image'}" alt="product image" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
                                 </div>
-                                <div class="platform-logo-container" style="display: flex; gap: 8px;">
+                                <div class="platform-logo-container" style="display: flex; gap: 8px; flex-wrap: wrap;">
                                     <span class="platform-badge ${badge.class}">${badge.name}</span>
                                     <span class="category-badge">Cat: ${category}</span>
+                                    <span class="deal-freq-badge" title="Deal Frequency: percentage of historical prices matching this drop">Freq: ${(deal.deal_frequency * 100).toFixed(0)}%</span>
                                 </div>
                                 <div class="deal-title" title="${title}">
                                     ${title}
